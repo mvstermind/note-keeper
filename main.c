@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
 
@@ -20,7 +21,7 @@ struct TerminalSize terminal_size(void);
 void create_frame(struct TerminalSize sizes);
 
 
-int main(void) {
+int main(int argc, char** argv) {
     struct TerminalSize size = terminal_size();
     if (size.COLUMNS == -1 && size.ROWS == -1) {
         return EXIT_FAILURE;
@@ -30,11 +31,28 @@ int main(void) {
         printf("cannot fit frame into the screen\n");
         return EXIT_FAILURE;
     }
-    create_frame(size);
+    // create_frame(size);
 
 
 
-    printf("Columns: %d\nRows: %d\n", size.COLUMNS, size.ROWS);
+    if (argc == 0){
+        printf("use -h or --help for help\n");
+        return EXIT_FAILURE;
+    }
+
+    if (argc > 1 && (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0)) {
+        printf("Usage:\n");
+        printf("\t-a to add to a note\n");
+        printf("\t-v to view notes\n");
+        printf("\n");
+        return EXIT_SUCCESS;
+    }
+ 
+    for (int i = 0; i < argc; i++) {
+       printf("%s\n", argv[i]);
+    }
+
+
     return EXIT_SUCCESS;
 }
 
