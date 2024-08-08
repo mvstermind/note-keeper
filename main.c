@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
 
@@ -156,10 +157,23 @@ int len_array(char **any){
 }
 
 void use_flags(char **args){
-    for (int i = 0; i < len_array(args); i ++){
-        if (args[i] == "-a") {
-            fopen(const char *, const char *)
-
+    for (int i = 0; i < len_array(args); i++){
+        if (strcmp(args[i], "-a") == 0) {
+            FILE *file = fopen("notes.txt", "a"); 
+            if (file != NULL){
+                for (int j = i + 1; j < len_array(args); j++) {
+                    if (strchr(args[j], '\n') != NULL || j == len_array(args) - 1) {
+                        // If \n found or end of array, write and break
+                        fprintf(file, "%s\n", args[j]);
+                        break;
+                    } else {
+                        fprintf(file, "%s ", args[j]);
+                    }
+                }
+                fclose(file);
+            } else {
+                perror("Error opening file");
+            }
         }
     }
 }
