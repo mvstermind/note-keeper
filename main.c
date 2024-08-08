@@ -21,6 +21,7 @@ void create_frame(struct TerminalSize sizes);
 int check_if_display_help(char **argv);
 int check_for_flags(char **argv);
 int len_array(char **any);
+void use_flags(char **any);
 
 int main(int argc, char** argv) {
     struct TerminalSize size = terminal_size();
@@ -41,6 +42,9 @@ int main(int argc, char** argv) {
     if (check_for_flags(argv) != 0){
         return EXIT_FAILURE;
     }
+
+    use_flags(argv);
+
     // create_frame(size);
 
     return EXIT_SUCCESS;
@@ -151,3 +155,11 @@ int len_array(char **any){
     return length;
 }
 
+void use_flags(char **args){
+    for (int i = 0; i < len_array(args); i ++){
+        if (args[i] == "-a") {
+            fopen(const char *, const char *)
+
+        }
+    }
+}
