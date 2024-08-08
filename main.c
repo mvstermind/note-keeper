@@ -113,6 +113,7 @@ int check_if_display_help(char **argv){
         if ((strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0)) {
             printf("Usage:\n");
             printf("\t-a to add to a note\n");
+            printf("\t-c to add to a note\n");
             printf("\t-v to view notes\n");
             printf("\n");
             return EXIT_SUCCESS;
@@ -125,6 +126,7 @@ int check_if_display_help(char **argv){
 int check_for_flags(char **argv) {
     int arg_a_appearance = 0;
     int arg_v_appearance = 0;
+    int arg_c_appearance = 0;
 
     for (int i = 0; i < len_array(argv); i++) {
         if (strcmp(argv[i], "-a") == 0) {
@@ -133,14 +135,17 @@ int check_for_flags(char **argv) {
         if (strcmp(argv[i], "-v") == 0) {
             arg_v_appearance++;
         }
+        if (strcmp(argv[i], "-c") == 0) {
+            arg_v_appearance++;
+        }
     }
 
-    if (arg_a_appearance == 0 && arg_v_appearance == 0) {
+    if (arg_a_appearance == 0 && arg_v_appearance == 0 && arg_c_appearance == 0) {
         printf("No valid flags found. Use -h or --help for help.\n");
         return EXIT_FAILURE;
     }
 
-    if (arg_a_appearance > 1 || arg_v_appearance > 1) {
+    if (arg_a_appearance > 1 || arg_v_appearance > 1 || arg_c_appearance > 1) {
         printf("No valid flags found. Use -h or --help for help.\n");
         return EXIT_FAILURE;
     }
@@ -173,6 +178,13 @@ void use_flags(char **args){
                 fclose(file);
             } else {
                 perror("Error opening file");
+            }
+        }
+        if (strcmp(args[i], "-c") == 0) {
+            FILE *file = fopen("notes.txt", "w"); 
+            if (file != NULL){
+                        fprintf(file, "");
+                fclose(file);
             }
         }
     }
