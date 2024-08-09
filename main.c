@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
     return EXIT_SUCCESS;
 }
 
-// Get terminal size
+// get terminal size
 struct TerminalSize terminal_size(void) {
     struct winsize ws;
     struct TerminalSize termSize = { -1, -1 }; // default values in case of error
@@ -65,54 +65,12 @@ struct TerminalSize terminal_size(void) {
     return termSize;
 }
 
-void create_frame(struct TerminalSize sizes) {
-    system("clear");
-
-    sizes.LEFT_PADDING = (sizes.COLUMNS - FRAME_WIDTH) / 2;
-    sizes.TOP_PADDING = (sizes.ROWS - FRAME_HEIGHT - 1) / 2;
-
-    for (int i = 0; i < sizes.TOP_PADDING; i++) {
-        printf("\n");
-    }
-
-    for (int i = 0; i < sizes.LEFT_PADDING; i++) {
-        printf(" ");
-    }
-    for (int j = 0; j < FRAME_WIDTH; j++) {
-        printf("-");
-    }
-    printf("\n");
-
-    for (int i = 0; i < FRAME_HEIGHT - 2; i++) {
-        for (int j = 0; j < sizes.LEFT_PADDING; j++) {
-            printf(" ");
-        }
-        printf("|");
-        for (int j = 0; j < FRAME_WIDTH - 2; j++) {
-            printf(" ");
-        }
-        printf("|\n");
-    }
-
-    for (int i = 0; i < sizes.LEFT_PADDING; i++) {
-        printf(" ");
-    }
-    for (int j = 0; j < FRAME_WIDTH; j++) {
-        printf("-");
-    }
-    printf("\n");
-
-    for (int i = 0; i < sizes.TOP_PADDING; i++) {
-        printf("\n");
-    }
-}
-
-// Print content inside the frame
+// Function to print content inside the frame and clear the rest of the screen
 void print_content_in_frame(struct TerminalSize sizes, const char *content) {
     system("clear");
 
     sizes.LEFT_PADDING = (sizes.COLUMNS - FRAME_WIDTH) / 2;
-    sizes.TOP_PADDING = (sizes.ROWS - FRAME_HEIGHT - 1) / 2;
+    sizes.TOP_PADDING = (sizes.ROWS - FRAME_HEIGHT) / 2;
 
     char line[FRAME_WIDTH - 2];
     int line_idx = 0;
@@ -166,7 +124,8 @@ void print_content_in_frame(struct TerminalSize sizes, const char *content) {
         printf("|\n");
     }
 
-    for (int i = 0; i < FRAME_HEIGHT - 2 - sizes.TOP_PADDING; i++) {
+    // Fill remaining space inside the frame
+    for (int i = line_idx; i < FRAME_HEIGHT - 2; i++) {
         for (int j = 0; j < sizes.LEFT_PADDING; j++) {
             printf(" ");
         }
@@ -184,6 +143,12 @@ void print_content_in_frame(struct TerminalSize sizes, const char *content) {
         printf("-");
     }
     printf("\n");
+
+    // Clear remaining lines below the frame to avoid residual output
+    int remaining_lines = sizes.ROWS - sizes.TOP_PADDING - FRAME_HEIGHT;
+    for (int i = 0; i < remaining_lines; i++) {
+        printf("\n");
+    }
 }
 
 // Check for help flag
