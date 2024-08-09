@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
 
     use_flags(argv);
 
-    // create_frame(size);
+    create_frame(size);
 
     return EXIT_SUCCESS;
 }
@@ -67,39 +67,50 @@ struct TerminalSize terminal_size(void) {
     return termSize;
 }
 
-// todo finish this thing after reading file
-void create_frame(struct TerminalSize sizes){
+void create_frame(struct TerminalSize sizes) {
     system("clear");
+
     sizes.LEFT_PADDING = (sizes.COLUMNS - FRAME_WIDTH) / 2;
 
-    // -1 this thing because top and bottom line will put this thing off center
-    sizes.TOP_PADDING = (sizes.ROWS - FRAME_HEIGHT-1) / 2;
+    // -1 because top and bottom lines will put this thing off-center
+    sizes.TOP_PADDING = (sizes.ROWS - FRAME_HEIGHT - 1) / 2;
 
-    // lower top line
-    for (int i = 0; i < sizes.TOP_PADDING; i++){
+    for (int i = 0; i < sizes.TOP_PADDING; i++) {
         printf("\n");
     }
 
-    // print centered horizontal line (top line of the frame)
     for (int i = 0; i < sizes.LEFT_PADDING; i++) {
         printf(" ");
     }
-    for (int j = 0; j < FRAME_WIDTH; j++){
+    for (int j = 0; j < FRAME_WIDTH; j++) {
         printf("-");
     }
     printf("\n");
 
+    for (int i = 0; i < FRAME_HEIGHT - 2; i++) {
+        for (int j = 0; j < sizes.LEFT_PADDING; j++) {
+            printf(" ");
+        }
+        printf("|");
+        for (int j = 0; j < FRAME_WIDTH - 2; j++) {
+            printf(" ");
+        }
+        printf("|\n");
+    }
+
     for (int i = 0; i < sizes.LEFT_PADDING; i++) {
         printf(" ");
     }
-    for (int j = 0; j < FRAME_WIDTH; j++){
+    for (int j = 0; j < FRAME_WIDTH; j++) {
         printf("-");
     }
-    // create space at the bottom of the screen
-    for (int i = 0; i < sizes.TOP_PADDING; i++){
+    printf("\n");
+
+    for (int i = 0; i < sizes.TOP_PADDING; i++) {
         printf("\n");
     }
 }
+
 
 int check_if_display_help(char **argv){
     int argc = len_array(argv);
@@ -163,6 +174,7 @@ int len_array(char **any){
 
 void use_flags(char **args){
     for (int i = 0; i < len_array(args); i++){
+
         if (strcmp(args[i], "-a") == 0) {
             FILE *file = fopen("notes.txt", "a"); 
             if (file != NULL){
@@ -183,7 +195,7 @@ void use_flags(char **args){
         if (strcmp(args[i], "-c") == 0) {
             FILE *file = fopen("notes.txt", "w"); 
             if (file != NULL){
-                        fprintf(file, "");
+                fprintf(file, "");
                 fclose(file);
             }
         }
